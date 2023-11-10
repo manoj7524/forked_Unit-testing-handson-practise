@@ -1,6 +1,6 @@
 import { html, fixture, expect } from '@open-wc/testing';
 import { localize } from '@lion/localize';
-import { stub } from 'sinon';
+import Sinon,{ stub } from 'sinon';
 import {CustomerDetails} from '../src/Customer/Customer-details.js';
 
 
@@ -17,14 +17,36 @@ describe('customer details', async() => {
     expect(sal.label).to.equal(localize.msg('change-language:monthlysalary'))
   })
 
-  it('Test handler',()=>{
-     elem.shadowRoot.getElementById('nextbtn').click();
+  it('Test next btn text',()=>{
+    
+     const btntext=elem.shadowRoot.getElementById('nextbtn').textContent;
+     expect(btntext).to.equal(localize.msg('change-language:next'));
+    
 
   })
 
-  it('checks for emi details', async()=>{
+  it('Test next btn for not null',()=>{
+   const btnnext= elem.shadowRoot.getElementById('nextbtn').textContent;
+   expect(btnnext).to.not.be.null;
+  })
+
+  it('checks for emi details method call', async()=>{
     const el=await fixture(html`<customer-details></customer-details>`);
     await el.shadowRoot.querySelector('.backbg-btn-color').click();
+
+    const spy=Sinon.spy(sub,'_toEmidetails');
+    setTimeout(()=>{
+      expect(spy.called).to.be.true;
+    },1000)
   });
+
+
+  it('Check for back btn text ',async()=>{
+    const el=await fixture(html`<customer-details></customer-details>`);
+    const backtext=await el.shadowRoot.querySelector('.backbg-btn-color').textContent;
+    expect(backtext).to.not.be.null;
+   
+
+  })
 
 });

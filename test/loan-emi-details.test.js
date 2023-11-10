@@ -18,7 +18,7 @@ describe('Loan EMI details', async() => {
     setTimeout(()=>{
       expect(spy.called).to.be.true;
 
-    })
+    },1000)
     
 
 
