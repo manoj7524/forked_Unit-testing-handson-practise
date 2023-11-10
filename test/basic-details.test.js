@@ -42,6 +42,12 @@ describe.skip('Basic details', () => {
        expect(amt.label).to.equal(localize.msg('change-language:monthlysalary'))
      })
 
+     xit('Test range field label value',()=>{
+      const range=comp.shadowRoot.getElementById('period')
+       
+      expect(range.label).to.equal(localize.msg('change-language:loanPeriod'));
+     })
+
      it('Test numtoword function call',()=>{
       const amt=comp.shadowRoot.getElementById('amount')
       const spy=Sinon.spy(bas,'_numToWord');
