@@ -1,99 +1,58 @@
 import { html, fixture, expect } from '@open-wc/testing';
-import Sinon,{ stub } from 'sinon';
+import Sinon from 'sinon';
 import { localize } from '@lion/localize';
-import {BasicDetails} from '../src/LoanBasicDetails/BasicDetails.js';
 import '../src/LoanBasicDetails/BasicDetails.js';
 
-describe.skip('Basic details', () => {
-  // Write test cases inside this block
-  // refer basic-details.js files
- 
-   describe("Amount Field Test Cases",async()=>{
-    const comp=await fixture(`<basic-details></basic-details>`);
-    const bas=new BasicDetails();
-    let amtfield
-    beforeEach(()=>{
-     amtfield=comp.shadowRoot.getElementById('amount');
-    })
+   describe("Basic Details",async()=>{
+    const comp=await fixture(html`<basic-details></basic-details>`);
+    const amtField=comp.shadowRoot.getElementById('amount');
 
-    // it("Amount-Required Test case",()=>{
+    const lionBtns=comp.shadowRoot.querySelectorAll('lion-button');
+    
+    it('Accesibility test - to check for the accesibility of the component',()=>{
+      expect(comp).to.be.accessible;
+     })
+
+     it('h2 Accesibility test - to check for the accessibility of heading',()=>{
+      const header2=comp.shadowRoot.querySelector('h2');
+      expect(header2).to.be.accessible;
+      expect(header2.innerText).to.be.equal(localize.msg('change-language:loandetails'));
+     })
+
+     it('input type test existance of lion-input',()=>{
+      const inputField=comp.shadowRoot.getElementById('type');
+      expect(inputField).to.exist;
+     })
+
+     it('test numtoword function call returns the Float value',()=>{
+        const a =200;
+        amtField.modelValue=a;
+        comp._numToWord();
+        expect(a).to.equal(200.00);
+       })
      
-    //   expect(amtfield.hasAttribute('required')).to.be.true;
-    // })
+       it('should check for the label of amount field',()=>{
+           expect(amtField.label).to.equal(localize.msg('change-language:monthlysalary'))
+         })
 
-    // it("Amount - Min value ",()=>{
-    //   amtfield.value=5000
-    //   const cevent=new Event('input',{bubbles:true});
-    //   amtfield.dispatchEvent(cevent)
-    //   // expect(amtfield.classList.contains("e-handle")).to.be.true;
-     
-    // })
+      it('test lion input range label',()=>{
+        const inputRange=comp.shadowRoot.querySelector('lion-input-range');
+        expect(inputRange.label).to.be.equal(localize.msg('change-language:loanPeriod'));
+      })
 
-    // it("Amount - Max value ",()=>{
-    //   amtfield.value=20000
-    //   const cevent=new Event('input',{bubbles:true});
-    //   amtfield.dispatchEvent(cevent)
-    //   expect(amtfield.classList.contains("e-handle")).to.be.false;
-    // })
-    it('Amount field test case',()=>{
-      // console.log("log ",elem.shadowRoot.getElementById)
-       const amt=comp.shadowRoot.getElementById('amount')
-       
-       expect(amt.label).to.equal(localize.msg('change-language:monthlysalary'))
-     })
+      it('test lionButton function call -  _toDashboard',()=>{
+        const toDashboardSpy=Sinon.spy(comp,'_toDashboard');
+        lionBtns[0].click();
+        expect(toDashboardSpy.called).to.be.true;
+      })
 
-     xit('Test range field label value',()=>{
-      const range=comp.shadowRoot.getElementById('period')
-       
-      expect(range.label).to.equal(localize.msg('change-language:loanPeriod'));
-     })
-
-     it('Test numtoword function call',()=>{
-      const amt=comp.shadowRoot.getElementById('amount')
-      const spy=Sinon.spy(bas,'_numToWord');
-        const event = new Event('keyup', { bubbles: true });
-       amt.dispatchEvent(event);
-      //amt.keyup();
-     
-      setTimeout(()=>{
-        expect(spy.called).to.be.true;
-        
-      },1000)
-     
-     })
-
-
-     it('check form submission ',()=>{
-      const spy=Sinon.spy(bas,'_captureDetails');
-      const f=comp.shadowRoot.querySelector('.basic-web-form')
-      const ev = new Event('submit', { bubbles: true });
-      f.dispatchEvent(ev);
-
-      
-
-      setTimeout(()=>{
-        expect(spy.called).to.be.true;
-      },1000)
-      
-
-
-     })
-
-     it('Back btn to dashboard',()=>{
-      const spy=Sinon.spy(bas,'_toDashboard');
-      const btn=comp.shadowRoot.querySelector('.btn-previous');
-      const ev = new Event('click', { bubbles: true });
-      btn.dispatchEvent(ev);
-
-      
-      setTimeout(()=>{
-        expect(spy.called).to.be.true;
-      },1000)
-
-
-     })
+      it('test lionButton function call -  _captureDetails',()=>{
+        const captureDetailsSpy=Sinon.spy(comp,'_captureDetails');
+        lionBtns[1].click();
+        expect(captureDetailsSpy.called).to.be.true;
+      })
     
    })
 
 
-});
+

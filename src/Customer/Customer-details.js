@@ -254,7 +254,7 @@ export class CustomerDetails extends LocalizeMixin(LitElement) {
               <lion-button
                 class="backbg-btn-color"
                 raised
-                @click=${this._toEmidetails}
+                @click=${()=>this._toEmidetails()}
                 >${localize.msg('change-language:back')}
               </lion-button>
 
